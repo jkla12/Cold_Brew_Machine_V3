@@ -127,9 +127,9 @@ void hw_init(void)
     log_i("username %s",deviceInfo.data.MQTT.UserName);
     log_i("password %s",deviceInfo.data.MQTT.Password);
     log_i("ClientID %s",deviceInfo.data.MQTT.ClientID);
-    delay_1ms(2000);
+    delay_1ms(2000);    // 延时2秒，等待串口屏初始化完成
     waterTapInit();
-    if(config.data.isLock)
+    if(config.data.isLock)  //判断是否锁定设备
     {
         log_i("lock");
         lockDevice();
@@ -139,7 +139,7 @@ void hw_init(void)
         log_i("unlock");
         unlockDevice();
     }
-    if(gpio_input_bit_get(ADDR0_PORT,ADDR0_PIN) == 1)
+    if(gpio_input_bit_get(ADDR0_PORT,ADDR0_PIN) == 1)   //判断是否开启输出
     {
         elog_set_output_enabled(true);
     }
@@ -149,19 +149,26 @@ void hw_init(void)
     }
 }
 
-
+/**
+ * ************************************************************************
+ * @brief  初始化任务
+ * 
+ * 
+ * 
+ * @version 1.0
+ * @author jiaokai 
+ * @date 2025-06-20
+ * 
+ * ************************************************************************
+ */
 void task_init(void)
 {
-    
     add_task_with_param(led_toggle_param,&led1,NULL, 100, true);    //LED运行指示灯
     add_task(lcd_cmd_scan,NULL,1,true);                             //冷萃机串口屏数据解析
     add_task(lcd_cmd_scan2,NULL,1,true);                            //水龙头串口屏数据解析
-    add_task(AT_Update,NULL,1,true);                                //AT指令解析更新
-    add_task(WIFIConfiguration,NULL,1000,true);                     //WIFI联网检测
     add_task(waterLevel_update,NULL,100,true);                      //水位检测
-    add_task(waterTapProcessControl,NULL,100,true);                 //水龙头检测
+    add_task(waterTapProcessControl,NULL,100,true);                 //水龙头数据处理
     add_task(debugProcess,NULL,10,true);                            //上位机数据接收
-    add_task(mqttConfig,NULL,10000,true);                           //MQTT配置
 }
 
 /* 添加无参数任务 */
@@ -423,7 +430,19 @@ void scheduler(void)
 
 
 
-
+/**
+ * ************************************************************************
+ * @brief  LED闪烁函数
+ * 
+ * @param[in] led_num  LED编号
+ * 
+ * 
+ * @version 1.0
+ * @author jiaokai 
+ * @date 2025-06-20
+ * 
+ * ************************************************************************
+ */
 void led_toggle_param(void* led_num) {
     gd_eval_led_toggle(*(led_typedef_enum*)led_num);
 }

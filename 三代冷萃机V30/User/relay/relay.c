@@ -8,6 +8,18 @@
 #define LOG_TAG    "relay"
 OutputState_TypeDef outputState = {0};
 
+/**
+ * ************************************************************************
+ * @brief  初始化输出
+ * 
+ * 
+ * 
+ * @version 1.0
+ * @author jiaokai 
+ * @date 2025-06-20
+ * 
+ * ************************************************************************
+ */
 void relay_init(void)
 {
     rcu_periph_clock_enable(RCU_GPIOB);
@@ -25,11 +37,37 @@ void relay_init(void)
     outputState.coolCurrentRuntime = 0;
 }
 
+/**
+ * ************************************************************************
+ * @brief  打开输出
+ * 
+ * @param[in] number  输出编号
+ * 
+ * 
+ * @version 1.0
+ * @author jiaokai 
+ * @date 2025-06-20
+ * 
+ * ************************************************************************
+ */
 void relay_ON(Relay_typedef_enum number)
 {
     GPIO_BOP(RELAY_GPIO_PORT[number]) = RELAY_GPIO_PIN[number];
 }
 
+/**
+ * ************************************************************************
+ * @brief  关闭输出
+ * 
+ * @param[in] number  输出编号
+ * 
+ * 
+ * @version 1.0
+ * @author jiaokai 
+ * @date 2025-06-20
+ * 
+ * ************************************************************************
+ */
 void relay_OFF(Relay_typedef_enum number)
 {
     GPIO_BC(RELAY_GPIO_PORT[number]) = RELAY_GPIO_PIN[number];

@@ -22,7 +22,7 @@ typedef struct
     uint8_t bufferIndex;                                        //接收缓存数组索引
     uint8_t isReceiveComplete[BUFFER_INDEX_MAX];                //接收完成标志
     uint16_t receiveCount;                                      //接收计数
-    uint16_t receiveLen[BUFFER_INDEX_MAX];                                        //接收数组长度
+    uint16_t receiveLen[BUFFER_INDEX_MAX];                      //接收数组长度
     uint8_t isInitialized;                                      //初始化完成标志
     uint8_t isConnected;                                        //WIFI连接成功标志位
     uint8_t mac[13];                                            //多一个字节用于null终止符
@@ -37,31 +37,9 @@ typedef struct
 
 extern WIFI_TypeDef WIFI;
 
-typedef enum {
-    AT_IDLE,
-    AT_SENDING,
-    AT_WAITING_PROMPT, // 等待提示符（用于RAW数据发送）
-    AT_WAITING,
-    AT_PROCESSING,
-    AT_ERROR
-} AT_CommandState_TypeDef;
 
-typedef struct {
-    AT_CommandState_TypeDef state;
-    char command[256];
-    char response[1024];
-    uint16_t responseIndex;
-    uint32_t timeoutMs;
-    uint32_t startTime;
-    void (*callback)(uint8_t success, const char* response);
-    const char* rawData;        // RAW数据指针（用于MQTTPUBRAW等命令）
-    size_t rawDataLen;          // RAW数据长度
-    uint8_t needRawSend;        // 是否需要发送RAW数据
-    uint8_t rawSent;            // RAW数据是否已发送
-    uint8_t bufferIndex;       // 新增：缓冲区索引，用于静态内存池管理
-} AT_Command_TypeDef;
 
-extern AT_Command_TypeDef currentCmd;
+
 
 
 
